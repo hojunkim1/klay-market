@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 const Home = ({ balance, count, setCount }) => {
-  const [number, setNumber] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [number, setNumber] = useState(0);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -22,8 +22,8 @@ const Home = ({ balance, count, setCount }) => {
           onChange={(e) => setNumber(e.target.value)}
           value={number}
         />
-        {loading ? <small>Loading...</small> : null}
         <button>setCount</button>
+        {loading ? <small>Loading...</small> : null}
       </form>
     </>
   );

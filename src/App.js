@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import caver, { countContract } from "./api/UseCaver";
 import Layout from "./components/Layout";
 import { ADDRESS, PRIVATE_KEY } from "./constants";
-import Detail from "./routes/Detail";
+import Account from "./routes/Account";
 import Home from "./routes/Home";
 
 const App = () => {
@@ -20,7 +20,7 @@ const App = () => {
       });
       console.log(receipt);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return;
     }
     setCount(newCount);
@@ -49,7 +49,7 @@ const App = () => {
               <Home balance={balance} count={count} setCount={setCountKlay} />
             }
           />
-          <Route path="/detail" element={<Detail />} />
+          <Route path="/account" element={<Account />} />
         </Route>
       </Routes>
     </BrowserRouter>
