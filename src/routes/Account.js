@@ -1,15 +1,15 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
-import { getKlipAddress, getKlipQrcode, getRequestKey } from "../api/UseKlip";
+import { getKlipQrcode, reqAuth, watchKlip } from "../api/UseKlip";
 
 const Account = () => {
   const [qrvalue, setQrvalue] = useState("DEFAULT");
 
   const onClick = async (e) => {
     e.preventDefault();
-    const reqKey = await getRequestKey();
+    const reqKey = await reqAuth("auth");
     setQrvalue(getKlipQrcode(reqKey));
-    await getKlipAddress(reqKey);
+    watchKlip(reqKey);
   };
 
   return (
