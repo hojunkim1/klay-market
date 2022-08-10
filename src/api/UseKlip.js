@@ -1,6 +1,6 @@
 import axios from "axios";
 import { COUNT_ABI } from "../abi";
-import { COUNT_CONTRACT_ADDRESS } from "../constants/constants.baobab";
+import { COUNT_CONTRACT_ADDRESS } from "../constants";
 
 // Constants
 const APP_NAME = "Klay Market";
@@ -30,12 +30,12 @@ export const reqAuth = async () => {
   return key;
 };
 
-export const reqExecuteContract = async (count) => {
+export const reqSetCount = async (count) => {
   const config = {
     transaction: {
       to: COUNT_CONTRACT_ADDRESS,
       value: "0",
-      abi: `${COUNT_ABI[0]}`,
+      abi: JSON.stringify(COUNT_ABI[1]),
       params: `["${count}"]`,
     },
   };
@@ -47,13 +47,16 @@ export const reqExecuteContract = async (count) => {
 export const getKlipQrcode = (requestKey) => `${A2A_API_QRCODE}${requestKey}`;
 
 // Watch klip
-export const watchKlip = (requestKey) => {
+export const watchKlip = (requestKey, cb) => {
   const timer = setInterval(async () => {
     try {
       const res = await axios.get(`${A2A_API_RESULT}${requestKey}`);
       if (res.data.result) {
         const { result } = res.data;
         console.log(result);
+        if (cb) {
+          cb(result);
+        }
         clearInterval(timer);
       }
     } catch (error) {

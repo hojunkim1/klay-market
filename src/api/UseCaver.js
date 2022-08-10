@@ -7,6 +7,8 @@ import {
   SECRET_KEY_ID,
 } from "../constants";
 
+const CYPRESS_NODE_API = "https://public-node-api.klaytnapi.com/v1/cypress";
+
 const option = {
   headers: [
     {
@@ -23,10 +25,7 @@ const option = {
 };
 
 const caver = new Caver(
-  new Caver.providers.HttpProvider(
-    "https://public-node-api.klaytnapi.com/v1/baobab",
-    option
-  )
+  new Caver.providers.HttpProvider(CYPRESS_NODE_API, option)
 );
 
 export default caver;

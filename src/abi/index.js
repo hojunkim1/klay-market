@@ -1,18 +1,5 @@
 export const COUNT_ABI = [
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "num",
-        type: "uint256",
-      },
-    ],
-    name: "store",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "retrieve",
     outputs: [
@@ -23,6 +10,19 @@ export const COUNT_ABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "num",
+        type: "uint256",
+      },
+    ],
+    name: "store",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];

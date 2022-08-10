@@ -2,29 +2,13 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import caver, { countContract } from "./api/UseCaver";
 import Layout from "./components/Layout";
-import { ADDRESS, PRIVATE_KEY } from "./constants";
+import { ADDRESS } from "./constants";
 import Account from "./routes/Account";
 import Home from "./routes/Home";
 
 const App = () => {
   const [balance, setBalance] = useState(0);
   const [count, setCount] = useState(0);
-
-  const setCountKlay = async (newCount) => {
-    try {
-      const deployer = caver.wallet.keyring.createFromPrivateKey(PRIVATE_KEY);
-      caver.wallet.add(deployer);
-      const receipt = await countContract.methods.store(newCount).send({
-        from: deployer.address,
-        gas: "3000000",
-      });
-      console.log(receipt);
-    } catch (error) {
-      console.error(error);
-      return;
-    }
-    setCount(newCount);
-  };
 
   useEffect(() => {
     const getBalance = async (address) => {
@@ -46,10 +30,15 @@ const App = () => {
           <Route
             path="/"
             element={
-              <Home balance={balance} count={count} setCount={setCountKlay} />
+              <Home balance={balance} count={count} setCount={setCount} />
             }
           />
-          <Route path="/account" element={<Account />} />
+          <Route
+            path="/account"
+            element={
+              <Account balance={balance} count={count} setCount={setCount} />
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
