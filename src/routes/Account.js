@@ -1,54 +1,37 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
-import { getKlipQrcode, reqAuth, reqSetCount, watchKlip } from "../api/UseKlip";
+import { getKlipQrcode, reqAuthKey, watchKlip } from "../api/UseKlip";
 
-const Account = ({ balance, count, setCount }) => {
+const Account = ({ address, setAddress, balance }) => {
+  const [loading, setLoading] = useState(false);
   const [qrvalue, setQrvalue] = useState("DEFAULT");
-  const [number, setNumber] = useState(0);
-  const [address, setAddress] = useState("Get Your Address with Klip!");
 
-  const onClickGetAddress = async (e) => {
+  const onSubmitGetAddress = async (e) => {
     e.preventDefault();
-    const reqKey = await reqAuth();
-    setQrvalue(getKlipQrcode(reqKey));
-    watchKlip(reqKey, (result) => {
-      if (result) {
-        setAddress(result["klaytn_address"]);
-      }
-    });
-  };
-
-  const onClickSetCount = async (e) => {
-    e.preventDefault();
-    const reqKey = await reqSetCount(number);
-    setQrvalue(getKlipQrcode(reqKey));
-    watchKlip(reqKey, (result) => {
-      if (result) {
-        console.log(result);
-        setCount(number);
-      }
-    });
+    setLoading(true);
+    try {
+      const reqKey = await reqAuthKey();
+      setQrvalue(getKlipQrcode(reqKey));
+      watchKlip(reqKey, (result) => {
+        if (result) {
+          setAddress(result["klaytn_address"]);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
   };
 
   return (
     <>
       <h1>Account</h1>
-      <h2>Test Klip Api</h2>
-      <QRCodeSVG value={qrvalue} />
+      {!(qrvalue === "DEFAULT") ? <QRCodeSVG value={qrvalue} /> : null}
+      <h3>My Address: {address === "0x00" ? "None" : address}</h3>
       <h3>My Balance: {balance} KLAY</h3>
-      <h3>Count: {count}</h3>
-      <h3>Account Key: {address}</h3>
-      <form>
-        <button onClick={onClickGetAddress}>Get Address</button>
-      </form>
-      <form>
-        <input
-          type="number"
-          onChange={(e) => setNumber(e.target.value)}
-          value={number}
-          required
-        />
-        <button onClick={onClickSetCount}>Set Count</button>
+      <form onSubmit={onSubmitGetAddress}>
+        <button>Get Address</button>
+        {loading ? <small>Loading...</small> : null}
       </form>
     </>
   );

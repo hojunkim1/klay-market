@@ -1,9 +1,9 @@
 import Caver from "caver-js";
-import { COUNT_ABI } from "../abi";
+import { TOKEN_ABI } from "../abi";
 import {
   ACCESS_KEY_ID,
   CHAIN_ID,
-  COUNT_CONTRACT_ADDRESS,
+  NFT_CONTRACT_ADDRESS,
   SECRET_KEY_ID,
 } from "../constants";
 
@@ -30,7 +30,26 @@ const caver = new Caver(
 
 export default caver;
 
-export const countContract = new caver.contract(
-  COUNT_ABI,
-  COUNT_CONTRACT_ADDRESS
-);
+const nftContract = new caver.contract(TOKEN_ABI, NFT_CONTRACT_ADDRESS);
+
+export const fetchCardsOf = async (address) => {
+  // Fetch balance
+  const balance = await nftContract.methods.balanceOf(address).call();
+  // Fetch Token IDs
+  const tokenIds = [];
+  for (let i = 0; i < balance; i++) {
+    const id = await nftContract.methods.tokenOfOwnerByIndex(address, i).call();
+    tokenIds.push(id);
+  }
+  // Fetch Token URIs
+  const tokenUris = [];
+  for (let i = 0; i < balance; i++) {
+    const uri = await nftContract.methods.tokenURI(tokenIds[i]).call();
+    tokenUris.push(uri);
+  }
+  const nfts = [];
+  for (let i = 0; i < balance; i++) {
+    nfts.push({ uri: tokenUris[i], id: tokenUris[i] });
+  }
+  return nfts;
+};
