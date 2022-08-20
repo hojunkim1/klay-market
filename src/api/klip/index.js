@@ -1,7 +1,9 @@
 import axios from "axios";
+import { TOKEN_ABI } from "../../abi";
+import { NFT_CONTRACT_ADDRESS } from "../../constants";
 
 // Constants
-const APP_NAME = "Klay Market";
+const APP_NAME = "KLAY MARKET";
 const A2A_API_PREPARE = "https://a2a-api.klipwallet.com/v2/a2a/prepare";
 const A2A_API_QRCODE = "https://klipwallet.com/?target=/a2a?request_key=";
 const A2A_API_RESULT =
@@ -29,6 +31,19 @@ export const reqAuthKey = async () => {
   return key;
 };
 
+export const reqMintKey = async (to, tokenId, tokenURI) => {
+  const config = {
+    transaction: {
+      to: NFT_CONTRACT_ADDRESS,
+      value: "0",
+      abi: TOKEN_ABI.find((abi) => abi.name === "mintWithTokenURI"),
+      params: `["${to}","${tokenId}","${tokenURI}"]`,
+    },
+  };
+  const key = await getRequestKey("execute_contract", config);
+  return key;
+};
+
 // getKlipQrcode made qrcode address to use klip app.
 export const getKlipQrcode = (requestKey) => `${A2A_API_QRCODE}${requestKey}`;
 
@@ -49,5 +64,3 @@ export const watchKlip = (requestKey, cb) => {
     }
   }, 1000);
 };
-
-// const mintCardWithUri = async (toAddress, tokenId, uri, setQrvalue, cb) => {};

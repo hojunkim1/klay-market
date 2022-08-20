@@ -3,9 +3,13 @@ import { useEffect, useState } from "react";
 import { getBalance } from "../api/caver/user";
 import { getKlipQrcode, reqAuthKey, watchKlip } from "../api/klip";
 
+const DEFAULT_ADDRESS = "0x00";
+
 const Account = () => {
-  const [myAddress, setMyAddress] = useState("0x00");
+  // User data
+  const [myAddress, setMyAddress] = useState(DEFAULT_ADDRESS);
   const [myBalance, setMyBalance] = useState(0);
+  // Utils
   const [loading, setLoading] = useState(false);
   const [qrvalue, setQrvalue] = useState("DEFAULT");
 
@@ -26,16 +30,21 @@ const Account = () => {
     setLoading(false);
   };
 
+  const onSubmitLogout = () => {
+    localStorage.setItem("address", "0x00");
+    localStorage.setItem("balance", 0);
+  };
+
   useEffect(() => {
     const localAddress = localStorage.getItem("address");
-    if (localAddress !== "") {
+    if (localAddress !== DEFAULT_ADDRESS) {
       setMyAddress(localAddress);
       setMyBalance(localStorage.getItem("balance"));
     }
   }, []);
 
   useEffect(() => {
-    if (myAddress !== "0x00") {
+    if (myAddress !== DEFAULT_ADDRESS) {
       getBalance(myAddress).then((b) => {
         setMyBalance(Math.round(b * 1000) / 1000);
       });
@@ -43,7 +52,7 @@ const Account = () => {
   }, [myAddress]);
 
   useEffect(() => {
-    if (myAddress !== "0x00") {
+    if (myAddress !== DEFAULT_ADDRESS) {
       localStorage.setItem("address", myAddress);
       localStorage.setItem("balance", myBalance);
     }
@@ -53,12 +62,18 @@ const Account = () => {
     <>
       <h1>Account</h1>
       {!(qrvalue === "DEFAULT") ? <QRCodeSVG value={qrvalue} /> : null}
-      <h3>My Address: {myAddress === "0x00" ? "None" : myAddress}</h3>
+      <h3>My Address: {myAddress === DEFAULT_ADDRESS ? "None" : myAddress}</h3>
       <h3>My Balance: {myBalance} KLAY</h3>
-      <form onSubmit={onSubmitGetAddress}>
-        <button>Get Address</button>
-        {loading ? <small>Loading...</small> : null}
-      </form>
+      {myAddress === DEFAULT_ADDRESS ? (
+        <form onSubmit={onSubmitGetAddress}>
+          <button>Get Address</button>
+          {loading ? <small>Loading...</small> : null}
+        </form>
+      ) : (
+        <form onSubmit={onSubmitLogout}>
+          <button>Logout</button>
+        </form>
+      )}
     </>
   );
 };
