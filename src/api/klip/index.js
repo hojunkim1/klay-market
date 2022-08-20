@@ -50,4 +50,4 @@ export const watchKlip = (requestKey, cb) => {
   }, 1000);
 };
 
-const mintCardWithUri = async (toAddress, tokenId, uri, setQrvalue, cb) => {};
+// const mintCardWithUri = async (toAddress, tokenId, uri, setQrvalue, cb) => {};
