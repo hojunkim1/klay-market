@@ -5,7 +5,7 @@ const Layout = () => {
   return (
     <>
       <header>
-        <h1>Welcome to Klay Market!</h1>
+        <h1 className="text-3xl mt-10 mb-10">Welcome to Klay Market!</h1>
         <Navbar />
       </header>
       <main>

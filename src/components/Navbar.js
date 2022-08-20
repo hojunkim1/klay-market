@@ -4,10 +4,10 @@ const Navbar = () => {
   return (
     <nav>
       <ul>
-        <li>
+        <li className="text-blue-500">
           <Link to="/">Home</Link>
         </li>
-        <li>
+        <li className="text-blue-500">
           <Link to="account">Account</Link>
         </li>
       </ul>

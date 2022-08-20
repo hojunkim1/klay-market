@@ -1,0 +1,7 @@
+/* Settings */
+@import "./reset.css";
+@import "./mvp.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
