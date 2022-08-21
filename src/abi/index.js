@@ -1,2 +1,5 @@
-export const TOKEN_ABI = require("./KIP17TokenABI.json");
-export const MARKET_ABI = require("./MarketABI.json");
+import { MarketABI } from "./MarketABI";
+import { KIP17TokenABI } from "./KIP17TokenABI";
+
+export const TOKEN_ABI = KIP17TokenABI;
+export const MARKET_ABI = MarketABI;

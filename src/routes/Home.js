@@ -1,6 +1,7 @@
+import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { getNfts } from "../api/caver/nft";
-import { reqMintKey, watchKlip } from "../api/klip";
+import { getKlipQrcode, getRequestKey, getResult } from "../api/klip";
 import Button from "../components/Button";
 import { MARKET_CONTRACT_ADDRESS } from "../constants";
 
@@ -19,6 +20,7 @@ const Home = () => {
   const [marketNfts, setMarketNfts] = useState([]);
   // Utils
   const [loading, setLoading] = useState(false);
+  const [qrvalue, setQrvalue] = useState("DEFAULT");
   const [tab, setTab] = useState(MARKET); // market, wallet, mint
   // State
   const [mintImgUrl, setMintImgUrl] = useState("");
@@ -28,15 +30,21 @@ const Home = () => {
     e.preventDefault();
     setLoading(true);
     if (myAddress !== DEFAULT_ADDRESS) {
+      const randomTokenId = Math.floor(Math.random() * 1000000);
       try {
-        const randomTokenId = Math.floor(Math.random() * 1000000);
-        const reqKey = await reqMintKey(myAddress, randomTokenId, mintImgUrl);
-        console.log(reqKey);
-        watchKlip(reqKey, (result) => {
-          if (result) {
-            console.log(result);
-          }
-        });
+        const reqKey = await getRequestKey.mint(
+          myAddress,
+          randomTokenId,
+          mintImgUrl
+        );
+        if (reqKey) {
+          setQrvalue(getKlipQrcode(reqKey));
+          getResult(reqKey, (result) => {
+            if (result) {
+              console.log(result);
+            }
+          });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -121,14 +129,26 @@ const Home = () => {
         <>
           <h3 className="mb-10">My Balance: {myBalance} KLAY</h3>
           <div>
-            <ul>
+            <ul className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 gap-10">
               {myNfts.map((nft, index) => (
-                <li key={index}>
-                  <img
-                    alt={`My nft: ${index}`}
-                    src={nft["uri"]}
-                    width="200px"
-                  />
+                <li
+                  key={index}
+                  className="w-full max-w-md h-80 p-5 rounded-md shadow-lg bg-blue-100
+                              flex flex-col justify-between items-center"
+                >
+                  <div className="h-full mb-5 flex items-center">
+                    <img
+                      alt={`My nft: ${index}`}
+                      src={nft["uri"]}
+                      className="max-h-56"
+                    />
+                  </div>
+                  <span
+                    className="w-full py-2 rounded-md shadow-md font-bold bg-blue-200
+                              flex justify-center"
+                  >
+                    My NFT
+                  </span>
                 </li>
               ))}
             </ul>
@@ -138,10 +158,11 @@ const Home = () => {
       {/* 발행 페이지 */}
       {tab === MINT && myAddress !== DEFAULT_ADDRESS ? (
         <div>
+          {!(qrvalue === "DEFAULT") ? <QRCodeSVG value={qrvalue} /> : null}
           {statusCode >= 400 ? (
             <span>Image not found.</span>
           ) : (
-            <img src={mintImgUrl} alt="preview" height="300px" />
+            <img src={mintImgUrl} alt="preview" className="h-48 rounded-md" />
           )}
           <form onSubmit={onSubmitMint} className="mt-10 flex">
             <input

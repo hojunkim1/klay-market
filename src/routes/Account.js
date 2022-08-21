@@ -1,7 +1,7 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { getBalance } from "../api/caver/user";
-import { getKlipQrcode, reqAuthKey, watchKlip } from "../api/klip";
+import { getKlipQrcode, getRequestKey, getResult } from "../api/klip";
 import Button from "../components/Button";
 
 const DEFAULT_ADDRESS = "0x00";
@@ -18,9 +18,9 @@ const Account = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const reqKey = await reqAuthKey();
+      const reqKey = await getRequestKey.auth();
       setQrvalue(getKlipQrcode(reqKey));
-      watchKlip(reqKey, (result) => {
+      getResult(reqKey, (result) => {
         if (result) {
           setMyAddress(result["klaytn_address"]);
         }
