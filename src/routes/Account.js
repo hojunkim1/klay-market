@@ -2,6 +2,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { getBalance } from "../api/caver/user";
 import { getKlipQrcode, reqAuthKey, watchKlip } from "../api/klip";
+import Button from "../components/Button";
 
 const DEFAULT_ADDRESS = "0x00";
 
@@ -60,18 +61,18 @@ const Account = () => {
 
   return (
     <>
-      <h1>Account</h1>
+      <h1 className="text-3xl font-semibold mb-5">Account</h1>
       {!(qrvalue === "DEFAULT") ? <QRCodeSVG value={qrvalue} /> : null}
       <h3>My Address: {myAddress === DEFAULT_ADDRESS ? "None" : myAddress}</h3>
       <h3>My Balance: {myBalance} KLAY</h3>
       {myAddress === DEFAULT_ADDRESS ? (
-        <form onSubmit={onSubmitGetAddress}>
-          <button>Get Address</button>
+        <form onSubmit={onSubmitGetAddress} className="mt-10">
+          <Button text="Get Address" />
           {loading ? <small>Loading...</small> : null}
         </form>
       ) : (
-        <form onSubmit={onSubmitLogout}>
-          <button>Logout</button>
+        <form onSubmit={onSubmitLogout} className="mt-10">
+          <Button text="Logout" />
         </form>
       )}
     </>

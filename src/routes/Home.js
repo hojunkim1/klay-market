@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getNfts } from "../api/caver/nft";
 import { reqMintKey, watchKlip } from "../api/klip";
+import Button from "../components/Button";
 import { MARKET_CONTRACT_ADDRESS } from "../constants";
 
 // Constants
@@ -81,20 +82,24 @@ const Home = () => {
 
   return (
     <>
-      <h1 className="text-3xl">Home</h1>
+      <h1 className="text-3xl font-semibold mb-5">Home</h1>
       {/* 탭 바 */}
-      <nav>
+      <nav className="mb-10 flex justify-between">
         {tab === MARKET ? (
-          <h3>Market</h3>
+          <h3 className="text-lg font-semibold">Market</h3>
         ) : tab === WALLET ? (
-          <h3>Wallet</h3>
+          <h3 className="text-lg font-semibold">Wallet</h3>
         ) : tab === MINT ? (
-          <h3>Mint</h3>
+          <h3 className="text-lg font-semibold">Mint</h3>
         ) : null}
         {myAddress !== DEFAULT_ADDRESS ? (
-          <ul>
-            <li onClick={() => setTab(MARKET)}>Market</li>
-            <li onClick={() => setTab(WALLET)}>Wallet</li>
+          <ul className="flex">
+            <li onClick={() => setTab(MARKET)} className="mr-5">
+              Market
+            </li>
+            <li onClick={() => setTab(WALLET)} className="mr-5">
+              Wallet
+            </li>
             <li onClick={() => setTab(MINT)}>Mint</li>
           </ul>
         ) : null}
@@ -114,7 +119,7 @@ const Home = () => {
       {/* 내 nft */}
       {tab === WALLET && myAddress !== DEFAULT_ADDRESS ? (
         <>
-          <h3>My Balance: {myBalance} KLAY</h3>
+          <h3 className="mb-10">My Balance: {myBalance} KLAY</h3>
           <div>
             <ul>
               {myNfts.map((nft, index) => (
@@ -138,13 +143,14 @@ const Home = () => {
           ) : (
             <img src={mintImgUrl} alt="preview" height="300px" />
           )}
-          <form onSubmit={onSubmitMint}>
+          <form onSubmit={onSubmitMint} className="mt-10 flex">
             <input
               type="text"
               placeholder="image url"
               onChange={onChangeCheckValid}
+              className="p-4 mr-2 border-solid border-2 rounded-sm border-blue-200"
             />
-            <button>mint</button>
+            <Button text="mint" />
             {loading ? <small>Loading...</small> : null}
           </form>
         </div>
