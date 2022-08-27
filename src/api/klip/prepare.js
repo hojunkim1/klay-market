@@ -1,7 +1,8 @@
+// Constants
 const SERVER_URL = "https://a2a-api.klipwallet.com/v2/a2a";
 
 const prepare = {
-  auth: async (bappName) => {
+  auth: async ({ bappName }) => {
     return await (
       await fetch(`${SERVER_URL}/prepare`, {
         method: "POST",
@@ -17,7 +18,7 @@ const prepare = {
       })
     ).json();
   },
-  executeContract: async (bappName, to, value, abi, params) => {
+  executeContract: async ({ bappName, to, value, abi, params }) => {
     return await (
       await fetch(`${SERVER_URL}/prepare`, {
         method: "POST",
