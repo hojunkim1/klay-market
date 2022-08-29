@@ -11,10 +11,12 @@ const getResult = {
         })
       ).json();
       if (res.result) {
-        const { result } = res;
         if (cb) {
-          cb(result);
+          cb(res.result);
         }
+        clearInterval(timer);
+      } else if (res.error) {
+        console.log(res.error);
         clearInterval(timer);
       }
     }, 1000);
