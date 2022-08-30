@@ -1,47 +1,20 @@
 export const MarketABI = [
   {
+    constant: false,
     inputs: [
       {
-        internalType: "address",
-        name: "NFTAddress",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "buyNFT",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
         name: "operator",
         type: "address",
       },
       {
-        internalType: "address",
         name: "from",
         type: "address",
       },
       {
-        internalType: "uint256",
         name: "tokenId",
         type: "uint256",
       },
       {
-        internalType: "bytes",
         name: "data",
         type: "bytes",
       },
@@ -49,18 +22,41 @@ export const MarketABI = [
     name: "onKIP17Received",
     outputs: [
       {
-        internalType: "bytes4",
         name: "",
         type: "bytes4",
       },
     ],
+    payable: false,
     stateMutability: "nonpayable",
     type: "function",
   },
   {
+    constant: false,
     inputs: [
       {
-        internalType: "uint256",
+        name: "NFTAddress",
+        type: "address",
+      },
+      {
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "buyNFT",
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+      },
+    ],
+    payable: true,
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [
+      {
         name: "",
         type: "uint256",
       },
@@ -68,11 +64,11 @@ export const MarketABI = [
     name: "seller",
     outputs: [
       {
-        internalType: "address",
         name: "",
         type: "address",
       },
     ],
+    payable: false,
     stateMutability: "view",
     type: "function",
   },
